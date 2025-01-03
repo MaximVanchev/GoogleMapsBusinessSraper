@@ -1,0 +1,22 @@
+{
+  "name": "google_maps_business_scraper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaximVanchev/GoogleMapsBusinessSraper.git"
+  },
+  "author": "MaximVanchev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaximVanchev/GoogleMapsBusinessSraper/issues"
+  },
+  "homepage": "https://github.com/MaximVanchev/GoogleMapsBusinessSraper#readme",
+  "description": "",
+  "dependencies": {
+    "puppeteer": "^23.11.1"
+  }
+}
