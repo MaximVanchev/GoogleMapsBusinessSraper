@@ -1,10 +1,81 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
+
+const restaurantURL = 'https://www.google.com/maps/search/Restaurants/@42.436948,24.7869961,8z/data=!4m9!2m8!3m6!1sRestaurants!2sBulgaria!3s0x40a8fec1c85bf089:0xa01269bf4c10!4m2!1d25.48583!2d42.733883!6e5?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D';
+const acceptButtonClass = '.lssxud';
 
 (async () => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: false,
+        defaultViewport: null,
+        //userDataDir: "./tmp", // capcha
+    });
+
+    // DoesItHasWebSite(business)
+    // {
+    //     if(business.)
+    // } 
+
     const page = await browser.newPage();
 
-    await page.goto('https://www.google.com/maps')
+    await page.goto(restaurantURL);
+
+    await page.setViewport({width: 1080, height: 1024});
+
+    await page.click(acceptButtonClass);
+
+    await page.waitForNavigation();
+
+    const resultsSelector = '.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd';
+    await page.waitForSelector(resultsSelector, { timeout: 10000 });
+
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const scrollableContainer = await page.$(resultsSelector);
+
+    // const containerHTML = await scrollableContainer.evaluate((container) => container.innerHTML);
+    // console.log("Container Inner HTML:", containerHTML);
+    
+
+  if (!scrollableContainer) {
+    console.error("Scrollable container not found. Exiting.");
+    await browser.close();
+    return;
+  }
+
+  console.log("Scrollable container found. Starting scrolling process...");
+
+  // Scrolling configuration
+  const scrollInterval = 1000; // Time between scrolls in milliseconds
+  const maxScrollAttempts = 500; // Maximum number of scroll attempts
+  let scrollAttempts = 0;
+  let lastHeight = 0;
+  let newHeight = 0;
+
+  while (scrollAttempts < maxScrollAttempts) {
+    console.log(`Scroll attempt: ${scrollAttempts + 1}`);
+
+    // Scroll the container using the handle
+    await scrollableContainer.evaluate((container) => {
+      container.scrollBy(0, container.scrollHeight);
+    });
+
+    // Wait for the content to load
+    await delay(scrollInterval);
+
+    // Get the new scroll height
+    newHeight = await scrollableContainer.evaluate((container) => container.scrollHeight);
+
+    console.log(`Last height: ${lastHeight}, New height: ${newHeight}`);
+
+    // Exit the loop if no new content is loaded
+    // if (newHeight === lastHeight) {
+    //   console.log("No more content to load. Exiting scroll loop.");
+    //   break;
+    // }
+
+    lastHeight = newHeight;
+    scrollAttempts++; // Increment the scroll attempts
+  }
 
     await browser.close();
-})
+})();

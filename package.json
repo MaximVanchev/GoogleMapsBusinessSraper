@@ -18,5 +18,6 @@
   "description": "",
   "dependencies": {
     "puppeteer": "^23.11.1"
-  }
+  },
+  "type": "module"
 }
