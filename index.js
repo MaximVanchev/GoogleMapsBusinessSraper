@@ -2,6 +2,13 @@ import puppeteer from 'puppeteer';
 
 const restaurantURL = 'https://www.google.com/maps/search/Restaurants/@42.436948,24.7869961,8z/data=!4m9!2m8!3m6!1sRestaurants!2sBulgaria!3s0x40a8fec1c85bf089:0xa01269bf4c10!4m2!1d25.48583!2d42.733883!6e5?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D';
 const acceptButtonClass = '.lssxud';
+const resultsSelector = '[role="feed"]';
+const bottomEndClass = '.PbZDve';
+const businessLinkClass = '.hfpxzc';
+const businessWebLinkSelector = 'a[data-item-id="authority"]';
+const businessNameClass = 'h1.DUwDvf.lfPIob';
+const businessAdressSelector = 'button[data-item-id="address"] span';
+const businessPhoneSelector = 'button[data-tooltip="Copy phone number"] span';
 
 (async () => {
     const browser = await puppeteer.launch({
