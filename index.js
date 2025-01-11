@@ -72,10 +72,9 @@ const businessPhoneSelector = 'button[data-tooltip="Copy phone number"] span';
   const scrollInterval = 1000; // Time between scrolls in milliseconds
   const maxScrollAttempts = 500; // Maximum number of scroll attempts
   let scrollAttempts = 0;
-  let lastHeight = 0;
-  let newHeight = 0;
+  let bottomEndMessageAppear = false;
 
-  while (scrollAttempts < maxScrollAttempts) {
+  while (bottomEndMessageAppear == false) {
     console.log(`Scroll attempt: ${scrollAttempts + 1}`);
 
     // Scroll the container using the handle
@@ -86,18 +85,13 @@ const businessPhoneSelector = 'button[data-tooltip="Copy phone number"] span';
     // Wait for the content to load
     await delay(scrollInterval);
 
-    // Get the new scroll height
-    newHeight = await scrollableContainer.evaluate((container) => container.scrollHeight);
+    bottomEndMessageAppear = await page.$(bottomEndClass) == null ? false : true;
 
-    console.log(`Last height: ${lastHeight}, New height: ${newHeight}`);
-
-    // Exit the loop if no new content is loaded
-    // if (newHeight === lastHeight) {
-    //   console.log("No more content to load. Exiting scroll loop.");
-    //   break;
-    // }
-
-    lastHeight = newHeight;
+    if(bottomEndMessageAppear)
+    {
+      console.log("The bottom message appeared!");
+    }
+    
     scrollAttempts++; // Increment the scroll attempts
   }
 
