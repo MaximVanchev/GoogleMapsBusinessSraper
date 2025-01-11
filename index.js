@@ -48,8 +48,7 @@ const businessPhoneSelector = 'button[data-tooltip="Copy phone number"] span';
     await page.click(acceptButtonClass);
 
     await page.waitForNavigation();
-
-    const resultsSelector = '.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd';
+    
     await page.waitForSelector(resultsSelector, { timeout: 10000 });
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -70,7 +69,6 @@ const businessPhoneSelector = 'button[data-tooltip="Copy phone number"] span';
 
   // Scrolling configuration
   const scrollInterval = 1000; // Time between scrolls in milliseconds
-  const maxScrollAttempts = 500; // Maximum number of scroll attempts
   let scrollAttempts = 0;
   let bottomEndMessageAppear = false;
 
