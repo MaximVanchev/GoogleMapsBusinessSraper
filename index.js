@@ -15,6 +15,27 @@ class Buissness
   {
     return String.Format("Name: {0} | {1} | {2} | Link: {3}" , this.name , this.adress , this.phoneNumber , this.link);
   }
+
+  writeToCsvFile(list)
+  {
+    const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+
+    const csvWriter = createCsvWriter({
+      path: 'output.csv', // File path
+      header: [
+        { id: 'name', title: 'Name' },
+        { id: 'address', title: 'Address' },
+        { id: 'phoneNumber', title: 'Phone' },
+        { id: 'link', title: 'Link' }
+      ]
+    });
+
+    csvWriter.writeRecords(list)
+    .then(() => {
+        console.log('CSV file written successfully!');
+    })
+    .catch(err => console.error('Error writing CSV file:', err));
+  }
 }
 
 const restaurantURL = 'https://www.google.com/maps/search/Restaurants/@42.436948,24.7869961,8z/data=!4m9!2m8!3m6!1sRestaurants!2sBulgaria!3s0x40a8fec1c85bf089:0xa01269bf4c10!4m2!1d25.48583!2d42.733883!6e5?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D';
