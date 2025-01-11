@@ -95,5 +95,59 @@ const businessPhoneSelector = 'button[data-tooltip="Copy phone number"] span';
     scrollAttempts++; // Increment the scroll attempts
   }
 
+  //Getting all Hrefs of all buisnesses
+  const businessesHrefList = await page
+  .evaluate((sel) => {
+    elements = Array.from(document.querySelectorAll(sel));
+
+    return elements.map(el => el.getAttribute('href'));
+  }, businessLinkClass);
+
+  
+  //console.log(businessesHrefList);
+  
+
+  let businessesWithoutWebSitesList = []
+
+  for(let i = 0; i < businessesHrefList.length; i++)
+  {
+    await page.goto(businessesHrefList[i]);
+
+    //Checking if it has a website
+    const itHasWebSite = await page.evaluate((sel) => {
+      const element = document.querySelector(sel);
+
+      return element == null ? false : true;
+    } , businessWebLinkSelector)
+
+    if(itHasWebSite == false)
+    {
+      
+      const businessName = await page.emulate((sel) => {
+        return document.querySelector(sel).textContent;
+      } , businessNameClass);
+      console.log(businessName);
+      
+      const businessAdress = await page.evaluate((sel) => {
+        return document.querySelector(sel).textContent;
+      }, businessAdressSelector);
+      console.log(businessAdress);
+
+      const businessPhone = await page.evaluate((sel) => {
+        return document.querySelector(sel).textContent;
+      }, businessPhoneSelector);
+      console.log(businessPhone);
+
+      const buisnessLink = await businessesHrefList[i];
+      
+      //Adding the business to the list
+      const business = new Buissness(businessName , businessAdress , businessPhone , buisnessLink);
+      console.log(business.toString);
+      
+      businessesWithoutWebSitesList.push(business);
+    }
+  }
+  
+
     await browser.close();
 })();
